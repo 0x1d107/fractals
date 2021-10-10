@@ -56,7 +56,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Q))
                 window.close();
             if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S){
                 std::cout << "Saving image to fractal.png" <<std::endl;
@@ -81,22 +81,24 @@ int main()
             if(event.type == sf::Event::KeyPressed ){
                 switch(event.key.code){
                     case sf::Keyboard::J:
-                    zoom-=10.0;
+                    zoom/=1.5;
+
                     break;
                     case sf::Keyboard::K:
-                    zoom+=10.0;
+                    zoom*=1.5;
+
                     break;
                     case sf::Keyboard::Up:
-                    posy-=10;
+                    posy-=height/4;
                     break;
                     case sf::Keyboard::Down:
-                    posy+=10;
+                    posy+=height/4;
                     break;
                     case sf::Keyboard::Left:
-                    posx-=10;
+                    posx-=width/4;
                     break;
                     case sf::Keyboard::Right:
-                    posx+=10;
+                    posx+=width/4;
                     break;
                     default:;
                 }
