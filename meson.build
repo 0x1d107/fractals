@@ -5,7 +5,7 @@ win_dep = dependency('sfml-window',required:false)
 gfx_dep = dependency('sfml-graphics',required:false)
 deps=[sys_dep,win_dep,gfx_dep]
 if not (sys_dep.found() and win_dep.found() and gfx_dep.found())
-    deps = [subproject('sfml').get_variable('sfml_dep')]
+    deps = [subproject('sfml',default_options:'default_library=static').get_variable('sfml_dep')]
 endif
 
 executable('fractals',src,dependencies:deps)
