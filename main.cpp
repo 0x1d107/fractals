@@ -15,10 +15,10 @@ int main()
         ctx.pos.y -= ctx.size.y/4;
     }));
     canvas.add_event_handler(new KeyEventHandler(sf::Keyboard::Left,[](sf::Event& evt,CanvasContext& ctx){
-        ctx.pos.x -= ctx.size.x/4;
+        ctx.pos.x += ctx.size.x/4;
     }));
     canvas.add_event_handler(new KeyEventHandler(sf::Keyboard::Right,[](sf::Event& evt,CanvasContext& ctx){
-        ctx.pos.x += ctx.size.x/4;
+        ctx.pos.x -= ctx.size.x/4;
     }));
     canvas.add_event_handler(new KeyEventHandler(sf::Keyboard::J,[](sf::Event& evt,CanvasContext& ctx){
         ctx.zoom *= 1.1;
