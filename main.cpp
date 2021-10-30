@@ -2,12 +2,15 @@
 #include <SFML/Graphics.hpp>
 #include "canvas.hpp"
 #include "julia_fractal.hpp"
+#include "mandelbrot_fractal.hpp"
 #include "key_event_handler.hpp"
 int main()
 {
     JuliaFractal* f = new JuliaFractal(0.11301,0.74543);
+    MandelbrotFractal* m = new MandelbrotFractal();
     Canvas canvas(CanvasContext{{400,300},{800,600},200});
-    canvas.add_drawable(f);
+    //canvas.add_drawable(f);
+    canvas.add_drawable(m);
     canvas.add_event_handler(new KeyEventHandler(sf::Keyboard::Up,[](sf::Event& evt,CanvasContext& ctx){
         ctx.pos.y += ctx.size.y/4;
     }));
@@ -35,5 +38,6 @@ int main()
 
     canvas.event_loop();
     delete f;
+    delete m;
     return 0;
 }
