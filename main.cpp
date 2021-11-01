@@ -33,6 +33,7 @@ int main()
         sf::Image screenshot;
 
         canvas.get_image(screenshot);
+        std::cout << "Saving screenshot to fractal.png"<<std::endl;
         screenshot.saveToFile("fractal.png");
     }));
 
