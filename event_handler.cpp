@@ -1,5 +1,5 @@
 #include "event_handler.hpp"
-EventHandler::EventHandler(sf::Event::EventType event_type,std::function<void(sf::Event&,CanvasContext& )> event_handler){
+EventHandler::EventHandler(sf::Event::EventType event_type,HandlerFunction event_handler){
     handler = event_handler;
     this->event_type = event_type;
 }

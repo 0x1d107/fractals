@@ -1,6 +1,8 @@
 #include "mandelbrot_fractal.hpp"
 #define SQ(x) ((x)*(x))
-sf::Color MandelbrotFractal::get_pixel(const CanvasContext& ctx,double xp,double yp) const {
+sf::Color MandelbrotFractal::get_pixel(const CanvasContext& ctx,int xs,int ys) const {
+    double xp = (1.0*xs-ctx.pos.x)/ctx.zoom;
+    double yp = (1.0*ys-ctx.pos.y)/ctx.zoom;
     double Rsq = SQ(4);
     double a = xp;
     double b = yp;

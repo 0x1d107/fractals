@@ -6,9 +6,10 @@ JuliaFractal::JuliaFractal(double a, double b){
     this->b = b;
 
 }
-sf::Color JuliaFractal::get_pixel(const CanvasContext& context,double xp, double yp) const{
+sf::Color JuliaFractal::get_pixel(const CanvasContext& context,int x, int y) const{
     double Rsq = SQ(3);
-
+    double xp = (1.0*x-context.pos.x)/context.zoom;
+    double yp = (1.0*y-context.pos.y)/context.zoom;
     for(int i =0 ;i< maxiter;i++ ){
         double xn = xp*xp - yp*yp + a;
         double yn = 2*xp*yp + b;

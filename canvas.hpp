@@ -13,6 +13,7 @@ class Canvas{
     void draw() const;
     void add_event_handler(EventHandler* handler);
     void add_drawable(Drawable2D* drawable);
+    Drawable2D* replace_first_drawable(Drawable2D* replacement);
     void get_image(sf::Image& img);
     void event_loop();
     ~Canvas();

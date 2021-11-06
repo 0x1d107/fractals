@@ -10,9 +10,19 @@ Canvas::Canvas(const CanvasContext& ctx,std::string title){
     add_event_handler(new EventHandler(sf::Event::EventType::Closed,[this](sf::Event e,CanvasContext& ctx){
         this->window->close();
     }));
+    add_event_handler(new EventHandler(sf::Event::EventType::Resized,[this](sf::Event e,CanvasContext& ctx){
+        this->draw();
+    }));
     
    // std::cout<< &this->context << " constructor"<< std::endl;
 
+}
+sf::Color blend_over(const sf::Color& a,const sf::Color& b){
+    auto n_alpha=a.a + (255 - b.a);
+    auto nr = (a.r*a.a + b.r*b.a*(255-a.a))/n_alpha;
+    auto ng = (a.g*a.a + b.g*b.a*(255-a.a))/n_alpha;
+    auto nb = (a.b*a.a + b.b*b.a*(255-a.a))/n_alpha;
+    return sf::Color(nr,ng,nb,n_alpha);
 }
 void Canvas::draw() const{
     for(unsigned int x = 0; x < context.size.x; x++)
@@ -25,12 +35,15 @@ void Canvas::draw() const{
     for(auto& drawable:this->drawables){
         for( int x = 0; x < context.size.x; x++){
             for(int y = 0; y < context.size.y; y++){
-                auto color = drawable->get_pixel(context,(x-context.pos.x)/context.zoom,(y - context.pos.y)/context.zoom);
+                sf::Color old_color(pixels[context.size.x*y*4+x*4+0],pixels[context.size.x*y*4+x*4+1],pixels[context.size.x*y*4+x*4+2],pixels[context.size.x*y*4+x*4+3]);
+                auto color = drawable->get_pixel(context,x,y);
+                
                 if(color.a>0){
-                    pixels[context.size.x*y*4+x*4+0] = color.r;
-                    pixels[context.size.x*y*4+x*4+1] = color.g;
-                    pixels[context.size.x*y*4+x*4+2] = color.b;
-                    pixels[context.size.x*y*4+x*4+3] = color.a;
+                    auto blend = blend_over(color,old_color);
+                    pixels[context.size.x*y*4+x*4+0] = blend.r;
+                    pixels[context.size.x*y*4+x*4+1] = blend.g;
+                    pixels[context.size.x*y*4+x*4+2] = blend.b;
+                    pixels[context.size.x*y*4+x*4+3] = blend.a;
                 }
                     
             }
@@ -52,6 +65,12 @@ void Canvas::add_event_handler(EventHandler* handler){
 }
 void Canvas::add_drawable(Drawable2D* drawable){
     drawables.push_back(drawable);
+}
+Drawable2D* Canvas::replace_first_drawable(Drawable2D* repl){
+    Drawable2D* first = drawables.front();
+    drawables.pop_front();
+    drawables.push_front(repl);
+    return first;
 }
 void Canvas::event_loop(){
     draw();
