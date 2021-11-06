@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "canvas.hpp"
+#include "drawable2d.hpp"
 #include "julia_fractal.hpp"
 #include "mandelbrot_fractal.hpp"
 #include "key_event_handler.hpp"
@@ -21,8 +22,15 @@ int main()
         canvas.replace_first_drawable(frac[current_fractal]);
     
     });
+    Button *bp = new Button(sf::Vector2i{80,0},sf::Vector2i{100,30},"Previous",
+	    [&current_fractal,&frac,&canvas](CanvasContext& ctx){
+	    current_fractal = (frac.size() + (current_fractal -1)%frac.size())%frac.size();
+	    canvas.replace_first_drawable(frac[current_fractal]);
+	    });
     canvas.add_drawable(frac[current_fractal]);
     canvas.add_drawable(b);
+    canvas.add_drawable(bp);
+    bp->register_eventhandlers(canvas);
     b->register_eventhandlers(canvas);
     canvas.add_event_handler(new KeyEventHandler(sf::Keyboard::Up,[](sf::Event& evt,CanvasContext& ctx){
         ctx.pos.y += ctx.size.y/4;
