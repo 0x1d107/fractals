@@ -13,6 +13,7 @@ Canvas::Canvas(const CanvasContext& ctx,std::string title){
     add_event_handler(new EventHandler(sf::Event::EventType::Resized,[this](sf::Event e,CanvasContext& ctx){
         this->draw();
     }));
+    this->window->setFramerateLimit(16);
     
    // std::cout<< &this->context << " constructor"<< std::endl;
 
@@ -83,8 +84,9 @@ void Canvas::event_loop(){
                     draw();
                 }
             }
+            
         }
-        
+        sf::sleep(sf::milliseconds(100));
     }
 }
 Canvas::~Canvas(){

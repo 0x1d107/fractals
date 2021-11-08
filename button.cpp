@@ -1,4 +1,5 @@
 #include "button.hpp"
+#include "ttf/hack_ttf.h"
 #include "mouse_button_event_handler.hpp"
 Button::Button(sf::Vector2i pos,sf::Vector2i size,std::string text,std::function<void(CanvasContext& )> click):GuiElement(pos,size){
     this->onclick = click;
@@ -7,7 +8,7 @@ Button::Button(sf::Vector2i pos,sf::Vector2i size,std::string text,std::function
     this->rect.setFillColor(sf::Color(0x53caffff));
     this->text.setFillColor(sf::Color::Black);
     this->clicked = false;
-    hack.loadFromFile("ttf/Hack-Regular.ttf");
+    hack.loadFromMemory(Hack_Regular_ttf,Hack_Regular_ttf_len);
     this->text.setFont(hack);
     this->text.setString(text);
     render_image();
@@ -42,7 +43,10 @@ EventHandler* Button::get_eventhandler(){
 void Button::register_eventhandlers(Canvas& canvas){
     canvas.add_event_handler(get_eventhandler());
     canvas.add_event_handler(new EventHandler(sf::Event::MouseButtonReleased,[this](sf::Event e,CanvasContext& c){
+        this->rect.setFillColor(sf::Color(0x53caffff));
+        this->text.setFillColor(sf::Color::Black);
         this->clicked = false;
+        render_image();
     }));
     
 }
