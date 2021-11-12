@@ -50,3 +50,4 @@ void Button::register_eventhandlers(Canvas& canvas){
     }));
     
 }
+ 

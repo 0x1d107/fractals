@@ -67,6 +67,7 @@ int main()
 
     canvas.event_loop();
     delete b;
+    delete bp;
     delete f;
     delete m;
     delete zl;
