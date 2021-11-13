@@ -26,8 +26,8 @@ sf::Color blend_over(const sf::Color& a,const sf::Color& b){
     return sf::Color(nr,ng,nb,n_alpha);
 }
 void Canvas::draw() const{
-    for(unsigned int x = 0; x < context.size.x; x++)
-        for(unsigned int y = 0; y < context.size.y; y++){
+    for(int x = 0; x < context.size.x; x++)
+        for(int y = 0; y < context.size.y; y++){
             pixels[context.size.x*y*4+x*4+0] = 0;
             pixels[context.size.x*y*4+x*4+1] = 0;
             pixels[context.size.x*y*4+x*4+2] = 0;
@@ -77,15 +77,18 @@ void Canvas::event_loop(){
     draw();
     while(window->isOpen()){
         sf::Event event;
+        bool dirty = false;
         while(window->pollEvent(event)){
             for(auto& handler : event_handlers){
                 if(handler->is_matching(event)){
                     handler->handle(event,this->context);
-                    draw();
+                    dirty=true;
                 }
             }
             
         }
+        if(dirty)
+            draw();
         sf::sleep(sf::milliseconds(100));
     }
 }

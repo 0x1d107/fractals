@@ -25,12 +25,14 @@ void Button::set_text(std::string text){
 EventHandler* Button::get_eventhandler(){
     return new MouseButtonEventHandler(sf::Mouse::Button::Left,sf::IntRect{position,size},
     [this](sf::Event e,CanvasContext& c){
+        if(!isEnabled())return;
         this->rect.setFillColor(sf::Color(0x181818ff));
         this->text.setFillColor(sf::Color::White);
         this->render_image();
         this->clicked = true;
     },
     [this](sf::Event e,CanvasContext& c){
+        if(!isEnabled())return;
         this->rect.setFillColor(sf::Color(0x53caffff));
         this->text.setFillColor(sf::Color::Black);
         if(this->clicked){
@@ -43,6 +45,7 @@ EventHandler* Button::get_eventhandler(){
 void Button::register_eventhandlers(Canvas& canvas){
     canvas.add_event_handler(get_eventhandler());
     canvas.add_event_handler(new EventHandler(sf::Event::MouseButtonReleased,[this](sf::Event e,CanvasContext& c){
+        if(!isEnabled())return;
         this->rect.setFillColor(sf::Color(0x53caffff));
         this->text.setFillColor(sf::Color::Black);
         this->clicked = false;

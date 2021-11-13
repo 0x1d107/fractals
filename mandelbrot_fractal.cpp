@@ -1,8 +1,6 @@
 #include "mandelbrot_fractal.hpp"
 #define SQ(x) ((x)*(x))
-sf::Color MandelbrotFractal::get_pixel(const CanvasContext& ctx,int xs,int ys) const {
-    double xp = (1.0*xs-ctx.pos.x)/ctx.zoom;
-    double yp = (1.0*ys-ctx.pos.y)/ctx.zoom;
+int MandelbrotFractal::get_value(const CanvasContext& ctx,double xp, double yp) const {
     double Rsq = SQ(4);
     double a = xp;
     double b = yp;
@@ -15,9 +13,9 @@ sf::Color MandelbrotFractal::get_pixel(const CanvasContext& ctx,int xs,int ys) c
         if(SQ(xp)+SQ(yp)>Rsq){
             //std::cout << "r^2:"<< SQ(xp)+SQ(yp)<<std::endl;
             sf::Uint8 c = 255 * i/maxiter;
-            return sf::Color(c,c,c,255);
+            return c;
         }
 
     }
-    return sf::Color::White;
+    return 255;
 }
