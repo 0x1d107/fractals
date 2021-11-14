@@ -1,18 +1,20 @@
 #pragma once
 #include "drawable2d.hpp"
 #include <functional>
-
+struct FractalPoint{
+    double x;
+    double y;
+    int iter;
+};
 class Fractal:public Drawable2D{
     protected: 
-    std::vector<int> cache;
-    int min_v;
-    int max_v;
+    std::vector<FractalPoint> cache;
     CanvasContext cache_ctx={{0,0},{0,0},0};
-    std::function <sf::Color(int value,int min_v,int max_v)> palette = [](int value,int min_v,int max_v){return sf::Color::Black;};
+    std::function <sf::Color(FractalPoint value)> palette = [](FractalPoint value){return sf::Color::Black;};
     public:
     void recompute(CanvasContext& ctx);
-    void set_palette(std::function <sf::Color(int,int,int)> palette);
+    void set_palette(std::function <sf::Color(FractalPoint)> palette);
     virtual sf::Color get_pixel(const CanvasContext& ctx,int x,int y) const override;
-    virtual int get_value(const CanvasContext& ctx,double x, double y) const = 0;
+    virtual FractalPoint get_value(const CanvasContext& ctx,double x, double y) const = 0;
 
 };

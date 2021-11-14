@@ -1,6 +1,6 @@
 #include "mandelbrot_fractal.hpp"
 #define SQ(x) ((x)*(x))
-int MandelbrotFractal::get_value(const CanvasContext& ctx,double xp, double yp) const {
+FractalPoint MandelbrotFractal::get_value(const CanvasContext& ctx,double xp, double yp) const {
     double Rsq = SQ(4);
     double a = xp;
     double b = yp;
@@ -12,10 +12,9 @@ int MandelbrotFractal::get_value(const CanvasContext& ctx,double xp, double yp) 
         yp = yn;
         if(SQ(xp)+SQ(yp)>Rsq){
             //std::cout << "r^2:"<< SQ(xp)+SQ(yp)<<std::endl;
-            sf::Uint8 c = 255 * i/maxiter;
-            return c;
+            return FractalPoint{xp,yp,i};
         }
 
     }
-    return 255;
+    return FractalPoint{xp,yp,maxiter};
 }

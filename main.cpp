@@ -8,6 +8,35 @@
 #include "button.hpp"
 #include "label.hpp"
 #include "text_input.hpp"
+#include <cmath>
+sf::Color hue(double angle){
+    int deg = angle/M_PI*180;
+    deg= (deg+360)%360;
+    int V = 255;
+    int a = V * (deg%60)/60;
+    int Vd = V - a;
+    switch((deg/60)%6){
+        case 0:
+            return sf::Color(V,a,0);
+        case 1:
+            return sf::Color(Vd,V,0);
+        case 2:
+            return sf::Color(0,V,a);
+        case 3:
+            return sf::Color(0,Vd,V);
+        case 4:
+            return sf::Color(a,0,V);
+        case 5:
+            return sf::Color(V,0,Vd);
+        default:
+            std::cout<<"snap!"<<std::endl;
+            return sf::Color::Black;
+    }
+}
+sf::Color operator*(const double c,const sf::Color& col){
+    return sf::Color(c*col.r,c*col.g,c*col.b);
+}
+
 int main()
 {
     JuliaFractal* f = new JuliaFractal(0,1);
@@ -21,8 +50,8 @@ int main()
     //canvas.add_drawable(f);
     f->recompute(ctx);
     m->recompute(ctx);
-    f->set_palette([](int value,int minv,int maxv){return sf::Color(value,value,value);});
-    m->set_palette([](int value,int minv,int maxv){return sf::Color(value,value,value);});
+    f->set_palette([](FractalPoint value){double c=(value.iter)/100.0; double arg = atan2(value.y,value.x); return c*hue(arg);});
+    m->set_palette([](FractalPoint value){double c=(value.iter)/100.0; double arg = atan2(value.y,value.x); return c*hue(arg);});
     TextInput *input = new TextInput(sf::Vector2i{200,0},sf::Vector2i{200,30},"0 1",[&input,f](CanvasContext& ctx,const std::string& value){
         try{
             std::string::size_type sz;

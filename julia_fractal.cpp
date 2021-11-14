@@ -6,7 +6,7 @@ JuliaFractal::JuliaFractal(double a, double b){
     this->b = b;
 
 }
-int JuliaFractal::get_value(const CanvasContext& context,double xp, double yp) const
+FractalPoint JuliaFractal::get_value(const CanvasContext& context,double xp, double yp) const
 {
 
     double Rsq = SQ(3);
@@ -17,12 +17,11 @@ int JuliaFractal::get_value(const CanvasContext& context,double xp, double yp) c
         yp = yn;
         if(SQ(xp)+SQ(yp)>Rsq){
             //std::cout << "r^2:"<< SQ(xp)+SQ(yp)<<std::endl;
-            sf::Uint8 c = 255 * i/maxiter;
-            return c;
+            return FractalPoint{xp,yp,i};
         }
 
     }
-    return 255;
+    return FractalPoint{xp,yp,(int)maxiter};
 }
 void JuliaFractal::setParams(double a,double b){
     this->a =a;
