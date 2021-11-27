@@ -63,13 +63,13 @@ int main()
             input->set_text("");
         }
     });
-    Button *b = new Button(sf::Vector2i{0,0},sf::Vector2i{70,30},"Next",[&current_fractal,&frac,&canvas,input,f](CanvasContext& ctx){
+    Button *b = new Button(sf::Vector2i{110,0},sf::Vector2i{70,30},"Next",[&current_fractal,&frac,&canvas,input,f](CanvasContext& ctx){
         current_fractal= (current_fractal+1)% frac.size();
         canvas.replace_first_drawable(frac[current_fractal]);
         input->setEnabled(frac[current_fractal] ==f);
     
     });
-    Button *bp = new Button(sf::Vector2i{80,0},sf::Vector2i{100,30},"Previous",[&current_fractal,&frac,&canvas,input,f](CanvasContext& ctx){
+    Button *bp = new Button(sf::Vector2i{0,0},sf::Vector2i{100,30},"Previous",[&current_fractal,&frac,&canvas,input,f](CanvasContext& ctx){
 	    current_fractal = (frac.size() + (current_fractal -1)%frac.size())%frac.size();
         frac[current_fractal]->recompute(ctx);
 	    canvas.replace_first_drawable(frac[current_fractal]);
