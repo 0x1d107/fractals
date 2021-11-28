@@ -8,6 +8,7 @@
 #include "button.hpp"
 #include "label.hpp"
 #include "text_input.hpp"
+#include "morse_fractal.hpp"
 #include <cmath>
 sf::Color hue(double angle){
     int deg = angle/M_PI*180;
@@ -41,17 +42,23 @@ int main()
 {
     JuliaFractal* f = new JuliaFractal(0,1);
     MandelbrotFractal* m = new MandelbrotFractal();
+    MorseFractal* o = new MorseFractal(MorseDirections{{-3,-3,2,-3,2,2}});
     int current_fractal = 0;
     std::vector< Fractal* > frac;
     frac.push_back(f);
     frac.push_back(m);
+    frac.push_back(o);
     CanvasContext ctx={{400,300},{800,600},200};
     Canvas canvas(ctx);
     //canvas.add_drawable(f);
     f->recompute(ctx);
     m->recompute(ctx);
-    f->set_palette([](FractalPoint value){double c=(value.iter)/100.0; double arg = atan2(value.y,value.x); return c*hue(arg);});
-    m->set_palette([](FractalPoint value){double c=(value.iter)/100.0; double arg = atan2(value.y,value.x); return c*hue(arg);});
+    o->recompute(ctx);
+    auto hue_palette = [](FractalPoint value){double c=(value.iter)/100.0; double arg = atan2(value.y,value.x); return c*hue(arg);};
+    auto bnw_palette = [](FractalPoint value){int c=(value.iter)>0; return c*sf::Color::White;};
+    o->set_palette(bnw_palette);
+    f->set_palette(hue_palette);
+    m->set_palette(hue_palette);
     TextInput *input = new TextInput(sf::Vector2i{200,0},sf::Vector2i{200,30},"0 1",[&input,f](CanvasContext& ctx,const std::string& value){
         try{
             std::string::size_type sz;
@@ -134,5 +141,6 @@ int main()
     delete f;
     delete m;
     delete zl;
+    delete o;
     return 0;
 }

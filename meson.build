@@ -11,6 +11,7 @@ src=['main.cpp',
 'label.cpp',
 'text_input.cpp',
 'fractal.cpp',
+'morse_fractal.cpp',
 'ttf/hack_ttf.cpp']
 sys_dep = dependency('sfml-system',required:false)
 win_dep = dependency('sfml-window',required:false)

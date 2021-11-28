@@ -11,7 +11,7 @@ void Fractal::set_palette(std::function <sf::Color(FractalPoint)> palette){
 }
 void Fractal::recompute(CanvasContext& ctx){
     if (ctx == cache_ctx)return;
-    cache_ctx = ctx;
+    
     cache.resize(ctx.size.x * ctx.size.y);
 
     for(int y = 0;y< ctx.size.y;y++){
@@ -23,4 +23,5 @@ void Fractal::recompute(CanvasContext& ctx){
 
         }
     }
+    cache_ctx = ctx;
 }
