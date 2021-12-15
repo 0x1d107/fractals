@@ -30,7 +30,6 @@ sf::Color hue(double angle){
         case 5:
             return sf::Color(V,0,Vd);
         default:
-            std::cout<<"snap!"<<std::endl;
             return sf::Color::Black;
     }
 }
@@ -41,24 +40,31 @@ sf::Color operator*(const double c,const sf::Color& col){
 int main()
 {
     JuliaFractal* f = new JuliaFractal(0,1);
+    f->name = "Julia fractal";
     MandelbrotFractal* m = new MandelbrotFractal();
-    MorseFractal* o = new MorseFractal(MorseDirections{{-3,-3,2,-3,2,2}});
+    m->name = "Mandlebrot fractal";
+    MorseFractal* o = new MorseFractal(MorseDirections{{1,1,3,3,-2,1}});
+    o->name = "Morse sequence fractal";
+    MorseFractal* k = new MorseFractal(MorseDirections{-3,-3,2,-3,2,2});
+    k->name = "Koch snowflake fractal";
     int current_fractal = 0;
     std::vector< Fractal* > frac;
     frac.push_back(f);
     frac.push_back(m);
     frac.push_back(o);
+    frac.push_back(k);
     CanvasContext ctx={{400,300},{800,600},200};
     Canvas canvas(ctx);
     //canvas.add_drawable(f);
-    f->recompute(ctx);
-    m->recompute(ctx);
-    o->recompute(ctx);
+    for(const auto& fractal : frac)
+        fractal->recompute(ctx);
     auto hue_palette = [](FractalPoint value){double c=(value.iter)/100.0; double arg = atan2(value.y,value.x); return c*hue(arg);};
     auto bnw_palette = [](FractalPoint value){int c=(value.iter)>0; return c*sf::Color::White;};
-    o->set_palette(bnw_palette);
+    auto gray_palette = [](FractalPoint value){double c=(value.iter)/100.0; return c*sf::Color::White;};
+    o->set_palette(gray_palette);
     f->set_palette(hue_palette);
     m->set_palette(hue_palette);
+    k->set_palette(bnw_palette);
     TextInput *input = new TextInput(sf::Vector2i{200,0},sf::Vector2i{200,30},"0 1",[&input,f](CanvasContext& ctx,const std::string& value){
         try{
             std::string::size_type sz;
@@ -70,24 +76,33 @@ int main()
             input->set_text("");
         }
     });
-    Button *b = new Button(sf::Vector2i{110,0},sf::Vector2i{70,30},"Next",[&current_fractal,&frac,&canvas,input,f](CanvasContext& ctx){
+
+
+    Label *nl = new Label(sf::Vector2i{200,550},sf::Vector2i{360,50},frac[current_fractal]->name);
+
+    Button *b = new Button(sf::Vector2i{110,0},sf::Vector2i{70,30},"Next",[&current_fractal,&frac,&canvas,input,f,nl](CanvasContext& ctx){
         current_fractal= (current_fractal+1)% frac.size();
+        frac[current_fractal]->recompute(ctx);
         canvas.replace_first_drawable(frac[current_fractal]);
         input->setEnabled(frac[current_fractal] ==f);
+        nl->set_text(frac[current_fractal]->name);
+        nl->render_image();
     
     });
-    Button *bp = new Button(sf::Vector2i{0,0},sf::Vector2i{100,30},"Previous",[&current_fractal,&frac,&canvas,input,f](CanvasContext& ctx){
+    Button *bp = new Button(sf::Vector2i{0,0},sf::Vector2i{100,30},"Previous",[&current_fractal,&frac,&canvas,input,f,nl](CanvasContext& ctx){
 	    current_fractal = (frac.size() + (current_fractal -1)%frac.size())%frac.size();
         frac[current_fractal]->recompute(ctx);
 	    canvas.replace_first_drawable(frac[current_fractal]);
         input->setEnabled(frac[current_fractal] ==f);
+        nl->set_text(frac[current_fractal]->name);
+        nl->render_image();
 	});
     Label *zl = new Label(sf::Vector2i{0,550},sf::Vector2i{180,50},"Zoom: "+std::to_string(ctx.zoom));
-    
     canvas.add_drawable(frac[current_fractal]);
     canvas.add_drawable(b);
     canvas.add_drawable(bp);
     canvas.add_drawable(zl);
+    canvas.add_drawable(nl);
 
     canvas.add_drawable(input);
 
@@ -135,12 +150,14 @@ int main()
 
 
     delete input;
-
+    delete nl;
     delete b;
     delete bp;
     delete f;
     delete m;
     delete zl;
     delete o;
+    delete k;
+    
     return 0;
 }

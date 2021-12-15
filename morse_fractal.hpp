@@ -20,6 +20,7 @@ class MorseFractal:public Fractal{
     MorseGen gen;
     public:
     MorseFractal(MorseDirections dirs);
+    void set_dirs(MorseDirections dirs);
     virtual void recompute(CanvasContext& ctx) override ;
     virtual FractalPoint get_value(const CanvasContext& ctx,double x, double y) const override;
 };

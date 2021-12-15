@@ -49,6 +49,9 @@ int MorseDirections::num2dir(int num){
 MorseFractal::MorseFractal(MorseDirections dirs){
     this->dirs = dirs;
 }
+void MorseFractal::set_dirs(MorseDirections dirs){
+    this->dirs = dirs;
+}
 void MorseFractal::recompute(CanvasContext& ctx){
     if (ctx == cache_ctx)return;
     gen.reset();

@@ -12,6 +12,7 @@ class Fractal:public Drawable2D{
     CanvasContext cache_ctx={{0,0},{0,0},0};
     std::function <sf::Color(FractalPoint value)> palette = [](FractalPoint value){return sf::Color::Black;};
     public:
+    std::string name= "";
     virtual void recompute(CanvasContext& ctx);
     void set_palette(std::function <sf::Color(FractalPoint)> palette);
     virtual sf::Color get_pixel(const CanvasContext& ctx,int x,int y) const override;
